@@ -66,7 +66,10 @@ class PlaylistsController extends AbstractController
     public function sort($champ, $ordre): Response
     {
         if ($champ === "name") {
-                $playlists = $this->playlistRepository->findAllOrderByName($ordre);
+            $playlists = $this->playlistRepository->findAllOrderByName($ordre);
+        }
+        if ($champ === "nombre_formation") {
+            $playlists = $this->playlistRepository->findAllOrderByFormationNumber($ordre);
         }
         $categories = $this->categorieRepository->findAll();
         return $this->render(self::CHEMINPLAYLIST, [
@@ -95,7 +98,7 @@ class PlaylistsController extends AbstractController
         $playlist = $this->playlistRepository->find($id);
         $playlistCategories = $this->categorieRepository->findAllForOnePlaylist($id);
         $playlistFormations = $this->formationRepository->findAllForOnePlaylist($id);
-        return $this->render(self::CHEMINPLAYLIST, [
+        return $this->render("pages/playlist.html.twig", [
             'playlist' => $playlist,
             'playlistcategories' => $playlistCategories,
             'playlistformations' => $playlistFormations
