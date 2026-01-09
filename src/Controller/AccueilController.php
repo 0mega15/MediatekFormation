@@ -29,7 +29,6 @@ class AccueilController extends AbstractController
     }
     
     #[Route('/', name: 'accueil')]
-    
     public function index(): Response
     {
         $formations = $this->repository->findAllLasted(2);
