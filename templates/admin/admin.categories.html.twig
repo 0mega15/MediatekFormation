@@ -1,0 +1,55 @@
+{% extends "baseadmin.html.twig" %}
+
+{% block body %}
+    <form class="form-inline mt-1" method="POST" action="{{ path('admin.categories.ajout') }}">
+        <div class="form-group mr-1 mb-2">
+            <input type="text" class="sm" name="name">                        
+            <button type="submit" class="btn btn-primary mb-2 btn-sm">Ajouter</button>
+        </div>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Nom
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categorie in categories %}
+                {% set categorieUtilisee = false %}
+
+                {% for formation in formations %}
+                    {% for cat in formation.categories %}
+                        {% if cat.id == categorie.id %}
+                            {% set categorieUtilisee = true %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+                <tr>
+                    <td>{{ categorie.name }}</td>
+
+                    <td>
+                        {% if categorieUtilisee %}
+                            <button class="btn btn-danger"
+                                    onclick="alert('Impossible de supprimer : catégorie utilisée'); return false;">
+                                Supprimer
+                            </button>
+                        {% else %}
+                            <a href="{{ path('admin.categories.suppr', {id: categorie.id}) }}"
+                               class="btn btn-danger"
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer la catégorie {{ categorie.name }} ?')">
+                                Supprimer
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}
